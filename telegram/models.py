@@ -19,10 +19,6 @@ class TelegramUser(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(default=timezone.now)
 
-    # Optional fields for tracking interaction
-    last_command = models.CharField(max_length=255, blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-
     def __str__(self):
         name = self.username or f"{self.first_name} {self.last_name}".strip()
         return f"{name} ({self.user_id})"
