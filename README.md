@@ -57,7 +57,7 @@ arz_watch_api/
 1. **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/pouria-drd/ArzWatchAPI.git
+    git clone https://github.com/pouria-drd/arz_watch_api.git
     cd ArzWatchAPI
     ```
 
