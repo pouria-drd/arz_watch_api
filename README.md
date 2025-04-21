@@ -108,7 +108,7 @@ arz_watch_api/
     ANON_THROTTLE_RATE=10/minute
 
     # API Cache
-    RESPONSE_CACHE_TIME=5
+    RESPONSE_CACHE_TIME=10
 
     # JWT Settings
     ACCESS_TOKEN_LIFETIME=15

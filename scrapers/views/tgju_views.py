@@ -21,8 +21,8 @@ coin_scraper = TGJUCoinScraper()
 gold_scraper = TGJUGoldScraper()
 currency_scraper = TGJUCurrencyScraper()
 
-# Cache response for 5 minutes by default
-response_cache_time = 60 * int(os.getenv("RESPONSE_CACHE_TIME", "5"))
+# Cache response for 10 minutes by default
+response_cache_time = 60 * int(os.getenv("RESPONSE_CACHE_TIME", "10"))
 
 
 class TGJUGoldView(RetrieveAPIView):
