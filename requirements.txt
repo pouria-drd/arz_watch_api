@@ -1,3 +1,4 @@
+APScheduler==3.11.0
 asgiref==3.8.1
 attrs==25.3.0
 beautifulsoup4==4.13.4
@@ -28,6 +29,7 @@ trio==0.30.0
 trio-websocket==0.12.2
 typing_extensions==4.13.2
 tzdata==2025.2
+tzlocal==5.3.1
 urllib3==2.4.0
 webdriver-manager==4.0.2
 websocket-client==1.8.0

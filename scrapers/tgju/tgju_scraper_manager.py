@@ -19,21 +19,21 @@ class TGJUScraperManager:
     def get_coin_data(self, save: bool = False):
         data = self.coin_scraper.fetch_data()
         if save:
-            self._save_to_file(data, "coin_data.json")
+            self._save_to_file(data, "tgju_coin_data.json")
         else:
             return data
 
     def get_gold_data(self, save: bool = False):
         data = self.gold_scraper.fetch_data()
         if save:
-            self._save_to_file(data, "gold_data.json")
+            self._save_to_file(data, "tgju_gold_data.json")
         else:
             return data
 
     def get_currency_data(self, save: bool = False):
         data = self.currency_scraper.fetch_data()
         if save:
-            self._save_to_file(data, "currency_data.json")
+            self._save_to_file(data, "tgju_currency_data.json")
         else:
             return data
 

@@ -1,8 +1,6 @@
 import os
-from dotenv import load_dotenv
-from datetime import datetime, timezone
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+import json
+from django.conf import settings
 
 from rest_framework import status
 from rest_framework.request import Request
@@ -10,28 +8,8 @@ from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.throttling import ScopedRateThrottle
 
-from api_keys.authentication import APIKeyAuthentication
 from scrapers.serializers import TGJUDataSerializer
-from scrapers.tgju import (
-    TGJUCoinScraper,
-    TGJUCurrencyScraper,
-    TGJUGoldScraper,
-    TGJUScraperManager,
-)
-
-# Loads the variables from the .env file into the environment
-load_dotenv()
-
-coin_scraper = TGJUCoinScraper()
-gold_scraper = TGJUGoldScraper()
-currency_scraper = TGJUCurrencyScraper()
-
-tgju_manager = TGJUScraperManager()
-tgju_manager.
-
-
-# Cache response for 5 minutes by default
-response_cache_time = 60 * int(os.getenv("RESPONSE_CACHE_TIME", "5"))
+from api_keys.authentication import APIKeyAuthentication
 
 
 class TGJUGoldView(RetrieveAPIView):
@@ -44,24 +22,30 @@ class TGJUGoldView(RetrieveAPIView):
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    @method_decorator(cache_page(response_cache_time))
     def get(self, request: Request, *args, **kwargs):
         """Retrieve TGJU gold data as a read-only endpoint."""
         try:
-            gold_data = gold_scraper.fetch_data()
+            # Read the JSON file
+            json_file_path = os.path.join(
+                settings.BASE_DIR, "scrapers/output/scrapers/tgju_gold_data.json"
+            )
 
-            if not gold_data:
+            if not os.path.exists(json_file_path):
                 return Response(
-                    {"message": "No gold data found."},
+                    {"message": "Gold data file not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+            gold_data = []
+
+            with open(json_file_path, "r", encoding="utf-8") as file:
+                gold_data = json.load(file)
 
             serializer = self.get_serializer(gold_data, many=True)
 
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": datetime.now(timezone.utc).isoformat(),
+                    "retrievedAt": gold_data[0].get("last_update"),
                     "message": "TGJU gold data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
@@ -83,24 +67,30 @@ class TGJUCoinView(RetrieveAPIView):
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    @method_decorator(cache_page(response_cache_time))
     def get(self, request: Request, *args, **kwargs):
         """Retrieve TGJU coin data as a read-only endpoint."""
         try:
-            coin_data = coin_scraper.fetch_data()
+            json_file_path = os.path.join(
+                settings.BASE_DIR, "scrapers/output/scrapers/tgju_coin_data.json"
+            )
 
-            if not coin_data:
+            if not os.path.exists(json_file_path):
                 return Response(
-                    {"message": "No coin data found."},
+                    {"message": "Coin data file not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+
+            coin_data = []
+
+            with open(json_file_path, "r", encoding="utf-8") as file:
+                coin_data = json.load(file)
 
             serializer = self.get_serializer(coin_data, many=True)
 
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": datetime.now(timezone.utc).isoformat(),
+                    "retrievedAt": coin_data[0].get("last_update"),
                     "message": "TGJU coin data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
@@ -122,24 +112,29 @@ class TGJUCurrencyView(RetrieveAPIView):
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    @method_decorator(cache_page(response_cache_time))
     def get(self, request: Request, *args, **kwargs):
         """Retrieve TGJU currency data as a read-only endpoint."""
         try:
-            currency_data = currency_scraper.fetch_data()
+            json_file_path = os.path.join(
+                settings.BASE_DIR, "scrapers/output/scrapers/tgju_currency_data.json"
+            )
 
-            if not currency_data:
+            if not os.path.exists(json_file_path):
                 return Response(
-                    {"message": "No currency data found."},
+                    {"message": "Currency data file not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+            currency_data = []
+
+            with open(json_file_path, "r", encoding="utf-8") as file:
+                currency_data = json.load(file)
 
             serializer = self.get_serializer(currency_data, many=True)
 
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": datetime.now(timezone.utc).isoformat(),
+                    "retrievedAt": currency_data[0].get("last_update"),
                     "message": "TGJU currency data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
