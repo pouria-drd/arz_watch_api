@@ -20,6 +20,7 @@ urlpatterns = [
     path(base_url + os.getenv("ADMIN_URL", "admin/"), admin.site.urls),
     # api urls
     path(base_url + "scrapers/", include("scrapers.urls")),
+    path(base_url + "telegram/", include("telegram.urls")),
 ]
 
 if settings.DEBUG:

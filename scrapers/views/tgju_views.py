@@ -17,7 +17,7 @@ class TGJUGoldView(RetrieveAPIView):
 
     http_method_names = ["get"]
     serializer_class = TGJUDataSerializer
-    # authentication_classes = [APIKeyAuthentication]  # You can set your custom one here
+    authentication_classes = [APIKeyAuthentication]  # You can set your custom one here
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
