@@ -10,6 +10,7 @@ class APIKeyAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "key",
+        "request_count",
         "is_active",
         "created_at",
         "expires_at",

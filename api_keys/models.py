@@ -10,6 +10,8 @@ class APIKey(models.Model):
     name = models.CharField(max_length=100)
     key = models.CharField(max_length=40, unique=True, editable=False)
 
+    request_count = models.PositiveIntegerField(default=0)
+
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(null=True, blank=True)
@@ -22,6 +24,10 @@ class APIKey(models.Model):
             return False
 
         return True
+
+    def increment_usage(self):
+        self.request_count += 1
+        self.save()
 
     def __str__(self):
         return f"{self.name} ({'Active' if self.is_active else 'Inactive'})"
