@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     # Custom apps
     "api_keys",
     "scrapers",
+    "telegram",
 ]
 
 MIDDLEWARE = [
