@@ -107,9 +107,6 @@ arz_watch_api/
     USER_THROTTLE_RATE=20/minute
     ANON_THROTTLE_RATE=10/minute
 
-    # API Cache
-    RESPONSE_CACHE_TIME=5
-
     # JWT Settings
     ACCESS_TOKEN_LIFETIME=15
     REFRESH_TOKEN_LIFETIME=24
@@ -122,17 +119,6 @@ arz_watch_api/
     EMAIL_HOST_USER=your-email@example.com
     EMAIL_HOST_PASSWORD=your-email-password
     DEFAULT_FROM_EMAIL=no-reply@example.com
-
-    # Database Configuration
-    DB_PORT=5432
-    DB_HOST=localhost
-    DB_USER=user
-    DB_NAME=database
-    DB_PASSWORD=password
-
-    # Logging Configuration
-    LOGIN_LOG_FILE=login_activity_v1.log
-    EMAIL_LOG_FILE=email_activity_v1.log
     ```
 
 5. **Run Migrations:**

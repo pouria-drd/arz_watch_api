@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 
 from telegram.models import TelegramUser
+from arz_watch_api.utils import async_notify_superusers
 from api_keys.authentication import APIKeyAuthentication
 
 
@@ -16,6 +17,7 @@ class TelegramUserCreateView(APIView):
     throttle_classes = [ScopedRateThrottle]
 
     def post(self, request: Request, *args, **kwargs):
+
         user_id = request.data.get("user_id")
 
         if not user_id:
@@ -23,7 +25,7 @@ class TelegramUserCreateView(APIView):
                 {"error": "user_id is required."}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Try to get existing user
+        # Try to get existing user or create a new one
         user, created = TelegramUser.objects.update_or_create(
             user_id=user_id,
             defaults={
@@ -35,6 +37,10 @@ class TelegramUserCreateView(APIView):
                 "last_seen": request.data.get("last_seen"),
             },
         )
+
+        # Notify superusers after the user is created/updated
+        message = f"Telegram user {'created' if created else 'updated'} with username {user.username}, first name {user.first_name}, last name {user.last_name}"
+        async_notify_superusers(message)
 
         return Response(
             {"message": "Created" if created else "Updated"},

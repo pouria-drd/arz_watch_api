@@ -177,3 +177,40 @@ REST_FRAMEWORK = {
         "anon": os.getenv("ANON_THROTTLE_RATE", "10/minute"),
     },
 }
+
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+)
+
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+
+
+# Logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "email_file_v1": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "email_activity_v1.log",
+        },
+        "email_console_v1": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "email_v1": {
+            "handlers": ["email_file_v1", "email_console_v1"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
