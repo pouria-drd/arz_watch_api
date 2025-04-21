@@ -12,7 +12,12 @@ from rest_framework.throttling import ScopedRateThrottle
 
 from api_keys.authentication import APIKeyAuthentication
 from scrapers.serializers import TGJUDataSerializer
-from scrapers.tgju import TGJUCoinScraper, TGJUCurrencyScraper, TGJUGoldScraper
+from scrapers.tgju import (
+    TGJUCoinScraper,
+    TGJUCurrencyScraper,
+    TGJUGoldScraper,
+    TGJUScraperManager,
+)
 
 # Loads the variables from the .env file into the environment
 load_dotenv()
@@ -21,8 +26,12 @@ coin_scraper = TGJUCoinScraper()
 gold_scraper = TGJUGoldScraper()
 currency_scraper = TGJUCurrencyScraper()
 
-# Cache response for 10 minutes by default
-response_cache_time = 60 * int(os.getenv("RESPONSE_CACHE_TIME", "10"))
+tgju_manager = TGJUScraperManager()
+tgju_manager.
+
+
+# Cache response for 5 minutes by default
+response_cache_time = 60 * int(os.getenv("RESPONSE_CACHE_TIME", "5"))
 
 
 class TGJUGoldView(RetrieveAPIView):
