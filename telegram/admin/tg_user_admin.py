@@ -34,12 +34,13 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "username",
         "full_name",
         "phone_number",
-        "is_bot",
-        "is_premium",
         "status",
         "request_count",
         "max_requests",
+        "is_bot",
+        "is_premium",
         "is_online_display",
+        "can_make_request_display",
         "language_code",
         "last_seen",
         "created_at",
@@ -103,11 +104,21 @@ class TelegramUserAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Requests",
+            {
+                "fields": (
+                    "request_count",
+                    "max_requests",
+                ),
+            },
+        ),
+        (
             "Timestamps",
             {
                 "fields": (
                     "created_at",
                     "last_seen",
+                    "last_reset_at",
                 ),
                 "classes": ("collapse",),
             },
@@ -168,3 +179,9 @@ class TelegramUserAdmin(admin.ModelAdmin):
         self.message_user(request, f"{queryset.count()} users' request count reset")
 
     reset_request_count.short_description = "Reset request count"
+
+    def can_make_request_display(self, obj):
+        return obj.can_make_request()
+
+    can_make_request_display.boolean = True
+    can_make_request_display.short_description = "Can make request"
