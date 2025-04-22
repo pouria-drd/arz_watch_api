@@ -10,6 +10,7 @@ from rest_framework.throttling import ScopedRateThrottle
 
 from scrapers.serializers import TGJUDataSerializer
 from api_keys.authentication import APIKeyAuthentication
+from telegram.models import TelegramCommand, TelegramUser
 
 SCRAPERS_OUTPUT_DIR = settings.BASE_DIR / "scrapers_output" / "tgju"
 
@@ -21,16 +22,37 @@ currency_json_file_path = os.path.join(SCRAPERS_OUTPUT_DIR, "currency.json")
 class TGJUCoinView(RetrieveAPIView):
     """Retrieve TGJU coin data as a read-only endpoint."""
 
-    http_method_names = ["get"]
+    http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
-    # authentication_classes = [APIKeyAuthentication]
+    authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    def get(self, request: Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         """Retrieve TGJU coin data as a read-only endpoint."""
         try:
+            # Check if the user is allowed to make a request
+            tg_user_id = request.data.get("user_id")
+            if not tg_user_id:
+                return Response(
+                    {"message": "TG user ID not provided."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            tg_user = TelegramUser.objects.filter(user_id=tg_user_id).first()
+            if not tg_user:
+                return Response(
+                    {"message": "TG user not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if not tg_user.can_make_request():
+                return Response(
+                    {"message": "TG user cannot make a request."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
             # Read the JSON file
             if not os.path.exists(coin_json_file_path):
                 return Response(
@@ -44,6 +66,18 @@ class TGJUCoinView(RetrieveAPIView):
                 coin_data = json.load(file)
 
             serializer = self.get_serializer(coin_data, many=True)
+
+            # Create a command for the user
+            TelegramCommand.objects.create(
+                tg_user=tg_user,
+                command_type="coin",
+            )
+
+            # Update the last seen time
+            tg_user.update_last_seen()
+
+            # Increment the request count
+            tg_user.increment_request_count()
 
             return Response(
                 {
@@ -63,16 +97,37 @@ class TGJUCoinView(RetrieveAPIView):
 class TGJUGoldView(RetrieveAPIView):
     """Retrieve TGJU gold data as a read-only endpoint."""
 
-    http_method_names = ["get"]
+    http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
     authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    def get(self, request: Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         """Retrieve TGJU gold data as a read-only endpoint."""
         try:
+            # Check if the user is allowed to make a request
+            tg_user_id = request.data.get("user_id")
+            if not tg_user_id:
+                return Response(
+                    {"message": "TG user ID not provided."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            tg_user = TelegramUser.objects.filter(user_id=tg_user_id).first()
+            if not tg_user:
+                return Response(
+                    {"message": "TG user not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if not tg_user.can_make_request():
+                return Response(
+                    {"message": "TG user cannot make a request."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
             # Read the JSON file
             if not os.path.exists(gold_json_file_path):
                 return Response(
@@ -85,6 +140,18 @@ class TGJUGoldView(RetrieveAPIView):
                 gold_data = json.load(file)
 
             serializer = self.get_serializer(gold_data, many=True)
+
+            # Create a command for the user
+            TelegramCommand.objects.create(
+                tg_user=tg_user,
+                command_type="gold",
+            )
+
+            # Update the last seen time
+            tg_user.update_last_seen()
+
+            # Increment the request count
+            tg_user.increment_request_count()
 
             return Response(
                 {
@@ -104,16 +171,37 @@ class TGJUGoldView(RetrieveAPIView):
 class TGJUCurrencyView(RetrieveAPIView):
     """Retrieve TGJU currency data as a read-only endpoint."""
 
-    http_method_names = ["get"]
+    http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
     authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
 
-    def get(self, request: Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         """Retrieve TGJU currency data as a read-only endpoint."""
         try:
+            # Check if the user is allowed to make a request
+            tg_user_id = request.data.get("user_id")
+            if not tg_user_id:
+                return Response(
+                    {"message": "TG user ID not provided."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            tg_user = TelegramUser.objects.filter(user_id=tg_user_id).first()
+            if not tg_user:
+                return Response(
+                    {"message": "TG user not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if not tg_user.can_make_request():
+                return Response(
+                    {"message": "TG user cannot make a request."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
             # Read the JSON file
             if not os.path.exists(currency_json_file_path):
                 return Response(
@@ -126,6 +214,18 @@ class TGJUCurrencyView(RetrieveAPIView):
                 currency_data = json.load(file)
 
             serializer = self.get_serializer(currency_data, many=True)
+
+            # Create a command for the user
+            TelegramCommand.objects.create(
+                tg_user=tg_user,
+                command_type="currency",
+            )
+
+            # Update the last seen time
+            tg_user.update_last_seen()
+
+            # Increment the request count
+            tg_user.increment_request_count()
 
             return Response(
                 {
