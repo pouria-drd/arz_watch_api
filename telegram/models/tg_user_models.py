@@ -21,11 +21,15 @@ class TelegramUser(models.Model):
     is_premium = models.BooleanField(default=False)
     language_code = models.CharField(max_length=10, blank=True, null=True)
 
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
+    request_count = models.PositiveIntegerField(default=0)
+    max_requests = models.PositiveIntegerField(default=100)
+
     is_active = models.BooleanField(default=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
 
     created_at = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(default=timezone.now)
+    last_reset_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         indexes = [
@@ -33,6 +37,7 @@ class TelegramUser(models.Model):
             models.Index(fields=["username"]),
             models.Index(fields=["is_active"]),
             models.Index(fields=["last_seen"]),
+            models.Index(fields=["last_reset_at"]),
         ]
         verbose_name = "Telegram User"
         verbose_name_plural = "Telegram Users"
@@ -50,3 +55,37 @@ class TelegramUser(models.Model):
     def update_last_seen(self):
         self.last_seen = timezone.now()
         self.save(update_fields=["last_seen"])
+
+    def reset_daily_requests(self):
+        """Reset the request count if it's a new day"""
+        now = timezone.now()
+        if now.date() > self.last_reset_at.date():
+            self.request_count = 0
+            self.last_reset_at = now
+            self.save(update_fields=["request_count", "last_reset_at"])
+
+    def reset_request_count(self):
+        """Reset the request count"""
+        self.request_count = 0
+        self.save(update_fields=["request_count"])
+
+    def can_make_request(self):
+        """Check if the user can make a request."""
+        self.reset_daily_requests()
+
+        if not self.is_active:
+            return False
+
+        if self.status in ["banned", "inactive"]:
+            return False
+
+        if self.request_count >= self.max_requests:
+            return False
+
+        return True
+
+    def increment_request_count(self):
+        """Increment the request count if allowed"""
+        if self.can_make_request():
+            self.request_count += 1
+            self.save(update_fields=["request_count"])

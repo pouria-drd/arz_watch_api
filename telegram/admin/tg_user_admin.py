@@ -37,10 +37,13 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "is_bot",
         "is_premium",
         "status",
+        "request_count",
+        "max_requests",
         "is_online_display",
         "language_code",
         "last_seen",
         "created_at",
+        "last_reset_at",
     ]
 
     list_filter = [
@@ -68,6 +71,7 @@ class TelegramUserAdmin(admin.ModelAdmin):
     date_hierarchy = "last_seen"
 
     actions = [
+        "reset_request_count",
         "ban_users",
         "activate_users",
         "export_as_json",
@@ -158,3 +162,9 @@ class TelegramUserAdmin(admin.ModelAdmin):
             ).count(),
         }
         return super().changelist_view(request, extra_context=extra_context)
+
+    def reset_request_count(self, request, queryset):
+        queryset.update(request_count=0)
+        self.message_user(request, f"{queryset.count()} users' request count reset")
+
+    reset_request_count.short_description = "Reset request count"
