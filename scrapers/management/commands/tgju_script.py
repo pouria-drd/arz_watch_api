@@ -1,7 +1,12 @@
-from scrapers.tgju import TGJUScraperManager
+from scrapers.modules.tgju import TGJUScraperManager
 
 
-def run_scraper(coins=False, gold=False, currency=False, save=True):
+def run_scraper(coins=False, gold=False, crypto=False, currency=False, save=True):
     scraper_manager = TGJUScraperManager()
 
-    scraper_manager.run(coins=coins, gold=gold, currency=currency, save=save)
+    scraper_manager.run(
+        coins=coins,
+        gold=gold,
+        currency=currency,
+        save=save,
+    )

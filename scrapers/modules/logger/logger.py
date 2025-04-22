@@ -1,7 +1,7 @@
 import os
 import logging
 from datetime import datetime
-from scrapers.core.config import BASE_DIR
+from django.conf import settings
 from colorlog import ColoredFormatter
 
 
@@ -23,7 +23,7 @@ class LoggerFactory:
             logging.Logger: The created logger.
         """
         # Root directory (adjust as needed)
-        base_dir = BASE_DIR
+        base_dir = settings.BASE_DIR
         log_dir = base_dir / "logs" / log_subdir
         os.makedirs(log_dir, exist_ok=True)
 

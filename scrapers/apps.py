@@ -10,9 +10,13 @@ class ScrapersConfig(AppConfig):
 
     def ready(self):
         # First, run the task immediately
-        # call_command(
-        #     "run_tgju_scraper", coins=True, gold=True, currency=True, no_save=False
-        # )
+        call_command(
+            "run_tgju_scraper",
+            coins=True,
+            gold=True,
+            currency=True,
+            no_save=False,
+        )
 
         # Then set up the scheduler to run it every 5 minutes
         scheduler = BackgroundScheduler()
@@ -20,7 +24,11 @@ class ScrapersConfig(AppConfig):
         # Schedule the management command to run every 5 minutes
         scheduler.add_job(
             lambda: call_command(
-                "run_tgju_scraper", coins=True, gold=True, currency=True, no_save=False
+                "run_tgju_scraper",
+                coins=True,
+                gold=True,
+                currency=True,
+                no_save=False,
             ),
             IntervalTrigger(minutes=5),
             id="tgju_scraper_scheduler",

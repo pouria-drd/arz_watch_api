@@ -264,6 +264,8 @@ env
 
 
 # Scrapers
+scrapers_output
+scrapers_output/
 output/
 logs/
 *.log
