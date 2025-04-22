@@ -23,7 +23,7 @@ class TGJUCoinView(RetrieveAPIView):
 
     http_method_names = ["get"]
     serializer_class = TGJUDataSerializer
-    authentication_classes = [APIKeyAuthentication]  # You can set your custom one here
+    # authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
@@ -65,7 +65,7 @@ class TGJUGoldView(RetrieveAPIView):
 
     http_method_names = ["get"]
     serializer_class = TGJUDataSerializer
-    authentication_classes = [APIKeyAuthentication]  # You can set your custom one here
+    authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
@@ -106,7 +106,7 @@ class TGJUCurrencyView(RetrieveAPIView):
 
     http_method_names = ["get"]
     serializer_class = TGJUDataSerializer
-    authentication_classes = [APIKeyAuthentication]  # You can set your custom one here
+    authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
