@@ -143,12 +143,16 @@ INTERNAL_IPS = os.getenv("INTERNAL_IPS", "127.0.0.1").split(
 # CORS Configuration
 # ---------------------------------------------------------------
 
-CORS_ALLOW_CREDENTIALS = (
-    os.getenv("CORS_ALLOW_CREDENTIALS", "False") == "True"
-)  # Whether to allow credentials in CORS
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(
-    ","
-)  # List of allowed origins for CORS
+# Whether to allow credentials in CORS
+CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "False") == "True"
+
+# List of allowed origins for CORS
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
