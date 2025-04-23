@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.http import JsonResponse
 from telegram.models import TelegramUser
+from django.utils.html import format_html
 from django.contrib.admin import SimpleListFilter
 
 
@@ -37,6 +38,7 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "status",
         "request_count",
         "max_requests",
+        "usage_percentage",
         "is_bot",
         "is_premium",
         "is_online_display",
@@ -185,3 +187,15 @@ class TelegramUserAdmin(admin.ModelAdmin):
 
     can_make_request_display.boolean = True
     can_make_request_display.short_description = "Can make request"
+
+    def usage_percentage(self, obj):
+        """
+        Calculates the usage percentage of requests.
+        """
+        if obj.max_requests > 0:
+            percent = (obj.request_count / obj.max_requests) * 100
+            return format_html("<b>{:.2}%</b>", float(percent))
+        else:
+            return "N/A"
+
+    usage_percentage.short_description = "Usage (%)"

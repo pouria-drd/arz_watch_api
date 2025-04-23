@@ -47,3 +47,41 @@ class TelegramUserCreateView(APIView):
             {"message": "Created" if created else "Updated"},
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
         )
+
+
+class TelegramUserInfoView(APIView):
+    http_method_names = ["post"]
+    authentication_classes = [APIKeyAuthentication]
+
+    throttle_scope = "user"
+    throttle_classes = [ScopedRateThrottle]
+
+    def post(self, request: Request, *args, **kwargs):
+        try:
+            user_id = request.data.get("user_id")
+            if not user_id:
+                return Response(
+                    {"error": "user_id is required."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user = TelegramUser.objects.filter(user_id=user_id).first()
+            if not user:
+                return Response(
+                    {"error": "User not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            return Response(
+                {
+                    "request_count": user.request_count,
+                    "max_request_count": user.max_requests,
+                    "created_at": user.created_at,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"error": f"Error retrieving user info"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

@@ -82,7 +82,7 @@ class TGJUCoinView(RetrieveAPIView):
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": coin_data[0].get("last_update"),
+                    "retrieved_at": coin_data[0].get("last_update"),
                     "message": "TGJU coin data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
@@ -156,7 +156,7 @@ class TGJUGoldView(RetrieveAPIView):
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": gold_data[0].get("last_update"),
+                    "retrieved_at": gold_data[0].get("last_update"),
                     "message": "TGJU gold data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
@@ -230,7 +230,7 @@ class TGJUCurrencyView(RetrieveAPIView):
             return Response(
                 {
                     "data": serializer.data,
-                    "retrievedAt": currency_data[0].get("last_update"),
+                    "retrieved_at": currency_data[0].get("last_update"),
                     "message": "TGJU currency data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
