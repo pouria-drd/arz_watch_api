@@ -62,7 +62,7 @@ arz_watch_api/
 
     ```bash
     git clone https://github.com/pouria-drd/arz_watch_api.git
-    cd ArzWatchAPI
+    cd arz_watch_api
     ```
 
 2. **Create and Activate a Virtual Environment:**
