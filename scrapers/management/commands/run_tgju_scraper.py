@@ -25,16 +25,16 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "--no-save",
+            "--save",
             action="store_true",
-            help="Only return data without saving to file",
+            help="Saves data to file",
         )
 
     def handle(self, *args, **kwargs):
         coins = kwargs["coins"]
         gold = kwargs["gold"]
         currency = kwargs["currency"]
-        save = not kwargs["no_save"]
+        save = kwargs["save"]
 
         # Run the scraper with the provided arguments
         run_scraper(

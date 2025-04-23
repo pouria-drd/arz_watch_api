@@ -22,21 +22,21 @@ class TGJUScraperManager:
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
 
-    def get_coin_data(self, save: bool = False):
+    def get_coin_data(self, save: bool = True):
         data = self.coin_scraper.fetch_data()
         if save:
             self._save_to_file(data, "coin.json")
         else:
             return data
 
-    def get_gold_data(self, save: bool = False):
+    def get_gold_data(self, save: bool = True):
         data = self.gold_scraper.fetch_data()
         if save:
             self._save_to_file(data, "gold.json")
         else:
             return data
 
-    def get_currency_data(self, save: bool = False):
+    def get_currency_data(self, save: bool = True):
         data = self.currency_scraper.fetch_data()
         if save:
             self._save_to_file(data, "currency.json")

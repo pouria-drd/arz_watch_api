@@ -20,8 +20,6 @@ currency_json_file_path = os.path.join(SCRAPERS_OUTPUT_DIR, "currency.json")
 
 
 class TGJUCoinView(RetrieveAPIView):
-    """Retrieve TGJU coin data as a read-only endpoint."""
-
     http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
     authentication_classes = [APIKeyAuthentication]
@@ -30,7 +28,6 @@ class TGJUCoinView(RetrieveAPIView):
     throttle_classes = [ScopedRateThrottle]
 
     def post(self, request: Request, *args, **kwargs):
-        """Retrieve TGJU coin data as a read-only endpoint."""
         try:
             # Check if the user is allowed to make a request
             tg_user_id = request.data.get("user_id")
@@ -95,8 +92,6 @@ class TGJUCoinView(RetrieveAPIView):
 
 
 class TGJUGoldView(RetrieveAPIView):
-    """Retrieve TGJU gold data as a read-only endpoint."""
-
     http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
     authentication_classes = [APIKeyAuthentication]
@@ -105,7 +100,6 @@ class TGJUGoldView(RetrieveAPIView):
     throttle_classes = [ScopedRateThrottle]
 
     def post(self, request: Request, *args, **kwargs):
-        """Retrieve TGJU gold data as a read-only endpoint."""
         try:
             # Check if the user is allowed to make a request
             tg_user_id = request.data.get("user_id")
@@ -169,8 +163,6 @@ class TGJUGoldView(RetrieveAPIView):
 
 
 class TGJUCurrencyView(RetrieveAPIView):
-    """Retrieve TGJU currency data as a read-only endpoint."""
-
     http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
     authentication_classes = [APIKeyAuthentication]
@@ -179,7 +171,6 @@ class TGJUCurrencyView(RetrieveAPIView):
     throttle_classes = [ScopedRateThrottle]
 
     def post(self, request: Request, *args, **kwargs):
-        """Retrieve TGJU currency data as a read-only endpoint."""
         try:
             # Check if the user is allowed to make a request
             tg_user_id = request.data.get("user_id")

@@ -103,13 +103,12 @@ class TGJUBaseScraper(ABC):
         return change_percentage, change_amount
 
     def _is_negative_change(self, change_data: Tag) -> bool:
-        return "low" in change_data.get("class", [])
+        return change_data.find("span", class_="low")
 
     def _parse_row(self, row: Tag, title: str) -> dict[str, str]:
         columns = row.find_all("td")
         price = self._clean_price(columns[0].text)
         change_data = columns[1]
-
         change_percentage, change_amount = self._extract_change(change_data)
         is_negative = self._is_negative_change(change_data)
 

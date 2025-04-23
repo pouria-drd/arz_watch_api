@@ -1,1 +1,2 @@
 from .tgju_serializers import TGJUDataSerializer
+from .coinex_serializer import CoinexDataSerializer
