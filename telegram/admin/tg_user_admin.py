@@ -34,7 +34,6 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "user_id",
         "username",
         "full_name",
-        "phone_number",
         "status",
         "request_count",
         "max_requests",
@@ -62,7 +61,6 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "username",
         "first_name",
         "last_name",
-        "phone_number",
     ]
 
     readonly_fields = [
@@ -89,7 +87,6 @@ class TelegramUserAdmin(admin.ModelAdmin):
                     "username",
                     "first_name",
                     "last_name",
-                    "phone_number",
                 )
             },
         ),
@@ -152,7 +149,6 @@ class TelegramUserAdmin(admin.ModelAdmin):
                 "username",
                 "first_name",
                 "last_name",
-                "phone_number",
                 "is_bot",
                 "is_premium",
                 "language_code",
