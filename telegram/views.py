@@ -33,14 +33,13 @@ class TelegramUserCreateView(APIView):
                 "first_name": request.data.get("first_name", ""),
                 "last_name": request.data.get("last_name", ""),
                 "is_bot": request.data.get("is_bot", False),
-                "phone_number": request.data.get("phone_number", ""),
                 "language_code": request.data.get("language_code", ""),
                 "last_seen": request.data.get("last_seen"),
             },
         )
 
         # Notify superusers after the user is created/updated
-        message = f"Telegram user {'created' if created else 'updated'} with username {user.username}, first name {user.first_name}, last name {user.last_name}"
+        message = f"Telegram user {'created' if created else 'updated'}\nusername: {user.username}, first name: {user.first_name}, last name: {user.last_name}"
         async_notify_superusers(message)
 
         return Response(

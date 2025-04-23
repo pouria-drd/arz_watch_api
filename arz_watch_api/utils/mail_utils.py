@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.contrib.auth.models import User
-
 from .email_thread import EmailThread
+from django.contrib.auth.models import User
 
 
 def async_notify_superusers(message: str):
