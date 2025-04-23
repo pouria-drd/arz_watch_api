@@ -7,6 +7,9 @@ class TGJUGoldScraper(TGJUBaseScraper):
     RELEVANT_TITLES = {
         "مثقال طلا",
         "طلای 18 عیار / 750",
+        "طلای ۲۴ عیار",
+        "آبشده نقدی",
+        "حباب آبشده",
     }
 
     def __init__(self):
