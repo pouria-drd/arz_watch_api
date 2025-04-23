@@ -1,10 +1,14 @@
+import os
+from dotenv import load_dotenv
 from django.apps import AppConfig
 from django.core.management import call_command
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 
-initial_run = True
-interval_trigger_minutes = 5
+load_dotenv()
+
+initial_run = os.getenv("INITIAL_RUN", "False") == "True"
+interval_trigger_minutes = int(os.getenv("INTERVAL_TRIGGER_MINUTES", 10))
 
 
 class ScrapersConfig(AppConfig):

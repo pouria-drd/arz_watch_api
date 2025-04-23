@@ -18,17 +18,21 @@ arz_watch_api/
 ├── arz_watch_api/      # Django project configuration
 ├── scrapers/           # Web scraping modules
 │   ├── admin/         # Admin interface configurations
-│   ├── core/          # Core functionality
-│   ├── logger/        # Logging configurations
 │   ├── migrations/    # Database migrations
-│   ├── output/        # Scraped data output
+│   ├── modules/       # Scraping modules
 │   ├── serializers/   # API serializers
-│   ├── tgju/          # TGJU specific scrapers
 │   ├── views/         # API views
-│   └── logs/          # Application logs
+│   ├── management/    # Custom management commands
+│   ├── tests.py       # Test cases
+│   ├── apps.py        # App configuration
+│   └── urls.py        # URL routing
+├── scrapers_output/    # Output directory for scraped data
+├── logs/              # Application logs
+├── telegram/          # Telegram bot integration
 ├── .env               # Environment variables
 ├── manage.py          # Django management script
-└── requirements.txt   # Python dependencies
+├── requirements.txt   # Python dependencies
+└── ArzWatchAPI_DB.sqlite3  # SQLite database file
 ```
 
 ## Features
@@ -107,9 +111,10 @@ arz_watch_api/
     USER_THROTTLE_RATE=20/minute
     ANON_THROTTLE_RATE=10/minute
 
-    # JWT Settings
-    ACCESS_TOKEN_LIFETIME=15
-    REFRESH_TOKEN_LIFETIME=24
+
+    # Scrapers Schedulers Configuration
+    INITIAL_RUN="False"
+    INTERVAL_TRIGGER_MINUTES="10"
 
     # Email Configuration
     EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
@@ -162,7 +167,6 @@ The project uses several key Python packages:
 -   Python-dotenv
 -   Django CORS Headers
 -   Django Debug Toolbar
--   JWT Authentication
 -   Gunicorn (for production)
 
 ## API Documentation
