@@ -1,10 +1,12 @@
 import os
 from dotenv import load_dotenv
+from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
 from rest_framework import routers
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 # Loads the variables from the .env file into the environment
 load_dotenv()
@@ -20,6 +22,7 @@ urlpatterns = [
     ),  # Admin URL without base_url
     path("scrapers/", include("scrapers.urls")),
     path("telegram/", include("telegram.urls")),
+    url(r"^favicon\.ico$", RedirectView.as_view(url="/static/favicon.ico")),
 ]
 
 # Only add base_url once at the root level
