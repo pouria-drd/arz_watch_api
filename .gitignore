@@ -270,3 +270,6 @@ output/
 logs/
 *.log
 *.log
+
+
+gunicorn.sock
