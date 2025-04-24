@@ -78,6 +78,7 @@ class TGJUBaseScraper(ABC):
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
+        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
         driver = webdriver.Chrome(service=service, options=options)
 
         try:

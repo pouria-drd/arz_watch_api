@@ -27,3 +27,5 @@ class Command(BaseCommand):
             crypto=crypto,
             save=save,
         )
+
+        self.stdout.write(self.style.SUCCESS("Successfully ran the ArzDigital scraper"))

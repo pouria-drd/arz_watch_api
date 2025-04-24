@@ -112,10 +112,10 @@ arz_watch_api/
     USER_THROTTLE_RATE=20/minute
     ANON_THROTTLE_RATE=10/minute
 
-
     # Scrapers Schedulers Configuration
-    INITIAL_RUN="False"
-    INTERVAL_TRIGGER_MINUTES="10"
+    INITIAL_RUN="True"
+    RUN_SCHEDULER="True"
+    INTERVAL_TRIGGER_MINUTES="3"
 
     # Email Configuration
     EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend

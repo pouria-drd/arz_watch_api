@@ -5,10 +5,17 @@ from django.core.management import call_command
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 
+# Load environment variables from .env file
 load_dotenv()
 
+# Scrapers Schedulers Configuration
 initial_run = os.getenv("INITIAL_RUN", "False") == "True"
+run_scheduler = os.getenv("RUN_SCHEDULER", "True") == "True"
 interval_trigger_minutes = int(os.getenv("INTERVAL_TRIGGER_MINUTES", 10))
+
+print(f"Initial Run: {initial_run}")
+print(f"Run Scheduler: {run_scheduler}")
+print(f"Interval Trigger Minutes: {interval_trigger_minutes}")
 
 
 class ScrapersConfig(AppConfig):
@@ -27,7 +34,7 @@ class ScrapersConfig(AppConfig):
     def _should_run_schedulers(self):
         """Determine if schedulers should run (helps prevent duplicate runs in some Django setups)."""
         # You could add more sophisticated checks here if needed
-        return True
+        return run_scheduler
 
     def _initialize_scheduler(self):
         """Initialize a single shared scheduler instance."""
