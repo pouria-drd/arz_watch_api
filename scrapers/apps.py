@@ -17,6 +17,7 @@ class ScrapersConfig(AppConfig):
     _scheduler = None  # Class-level reference to the scheduler
 
     def ready(self):
+        return
         """Initialize the schedulers when the app is ready."""
         if not self._should_run_schedulers():
             return
