@@ -1,14 +1,14 @@
 import os
 import json
 from django.conf import settings
-from .crypto import CoinExCryptoScraper
+from .crypto import ArzDigitalCryptoScraper
 
-SCRAPERS_OUTPUT_DIR = settings.BASE_DIR / "scrapers_output" / "coinex"
+SCRAPERS_OUTPUT_DIR = settings.BASE_DIR / "scrapers_output" / "arzdigital"
 
 
-class CoinExScraperManager:
+class ArzDigitalScraperManager:
     def __init__(self):
-        self.crypto_scraper = CoinExCryptoScraper()
+        self.crypto_scraper = ArzDigitalCryptoScraper()
 
     def _save_to_file(self, data, filename: str):
         """Internal method to save data to a JSON file."""

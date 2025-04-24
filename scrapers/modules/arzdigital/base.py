@@ -7,7 +7,6 @@ from typing import Any, Generator
 from bs4 import BeautifulSoup, Tag
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
-from datetime import datetime, timezone
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -17,8 +16,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
 
-class TGJUBaseScraper(ABC):
-    """Abstract base class for scraping TGJU price tables."""
+class ArzDigitalBaseScraper(ABC):
+    """Abstract base class for scraping crypto data from ArzDigital website."""
 
     _platform = platform.system()
 
@@ -30,7 +29,7 @@ class TGJUBaseScraper(ABC):
         self.scraper_type = scraper_type
 
     def fetch_data(self, pretty: bool = False) -> list[dict[str, Any]] | None:
-        self.logger.info(f"Fetching {self.scraper_type} data from TGJU...")
+        self.logger.info(f"Fetching {self.scraper_type} data from ArzDigital...")
 
         try:
             with self._get_driver() as driver:
@@ -39,7 +38,9 @@ class TGJUBaseScraper(ABC):
                 rows = self._extract_rows(page_content)
                 data = self._process_rows(rows)
 
-                self.logger.info(f"{self.scraper_type} data successfully scraped.")
+                self.logger.info(
+                    f"{self.scraper_type} data successfully scraped from ArzDigital."
+                )
                 return (
                     json.dumps(data, ensure_ascii=False, indent=4) if pretty else data
                 )
@@ -88,66 +89,16 @@ class TGJUBaseScraper(ABC):
     def _load_page(self) -> str:
         self.driver.get(self.url)
         WebDriverWait(self.driver, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "tr[data-market-row]"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "tr.arz-coin-tr"))
         )
         time.sleep(5)  # wait for the page to fully load (you can adjust this)
         return self.driver.page_source
 
     def _extract_rows(self, content: str) -> list[Tag]:
         soup = BeautifulSoup(content, "html.parser")
-        return soup.find_all("tr", {"data-market-row": True})
-
-    def _process_rows(self, rows: list[Tag]) -> list[dict[str, str]]:
-        seen = set()
-        result = []
-
-        for row in rows:
-            if not self._is_relevant_row(row):
-                continue
-
-            title = self._format_title(row.find("th").text.strip())
-            if title in seen:
-                continue
-            seen.add(title)
-            result.append(self._parse_row(row, title))
-
-        return result
-
-    def _format_title(self, title: str) -> str:
-        return title.replace(" / 750", "") if "750" in title else title
-
-    def _clean_price(self, price: str) -> str:
-        return price.strip().replace(",", "")
-
-    def _extract_change(self, change_data: Tag) -> tuple[str, str]:
-        change_text = change_data.text.strip()
-        if ")" in change_text:
-            parts = change_text.split(")")
-            change_percentage = parts[0] + ")"
-            change_amount = parts[1].strip().replace(",", "")
-        else:
-            change_percentage, change_amount = "0%", "0"
-        return change_percentage, change_amount
-
-    def _is_negative_change(self, change_data: Tag) -> bool:
-        return change_data.find("span", class_="low")
-
-    def _parse_row(self, row: Tag, title: str) -> dict[str, str]:
-        columns = row.find_all("td")
-        price = self._clean_price(columns[0].text)
-        change_data = columns[1]
-        change_percentage, change_amount = self._extract_change(change_data)
-        is_negative = self._is_negative_change(change_data)
-
-        return {
-            "title": title,
-            "price": price,
-            "change_percentage": f"{'-' if is_negative else ''}{change_percentage[1:-2]}%",
-            "change_amount": f"{'-' if is_negative else ''}{change_amount}",
-            "last_update": datetime.now(timezone.utc).isoformat(),
-        }
+        return soup.find_all("tr", class_="arz-coin-tr")
 
     @abstractmethod
-    def _is_relevant_row(self, row: Tag) -> bool:
-        """Determine if a row should be processed."""
+    def _process_rows(self, rows: list[Tag]) -> list[dict[str, str]]:
+        """Process rows to extract relevant data."""
         pass

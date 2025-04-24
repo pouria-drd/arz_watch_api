@@ -1,9 +1,9 @@
-from .coinex_script import run_scraper
+from .arzdigital_script import run_scraper
 from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = "Scrape CoinEx data and save it to file"
+    help = "Scrape ArzDigital data and save it to file"
 
     def add_arguments(self, parser):
         parser.add_argument(

@@ -8,18 +8,18 @@ from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.throttling import ScopedRateThrottle
 
-from scrapers.serializers import CoinexDataSerializer
+from scrapers.serializers import ArzDigitalDataSerializer
 from api_keys.authentication import APIKeyAuthentication
 from telegram.models import TelegramCommand, TelegramUser
 
-SCRAPERS_OUTPUT_DIR = settings.BASE_DIR / "scrapers_output" / "coinex"
+SCRAPERS_OUTPUT_DIR = settings.BASE_DIR / "scrapers_output" / "arzdigital"
 
 crypto_json_file_path = os.path.join(SCRAPERS_OUTPUT_DIR, "crypto.json")
 
 
-class CoinexCryptoView(RetrieveAPIView):
+class ArzdigitalCryptoView(RetrieveAPIView):
     http_method_names = ["post"]
-    serializer_class = CoinexDataSerializer
+    serializer_class = ArzDigitalDataSerializer
     authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
@@ -78,12 +78,12 @@ class CoinexCryptoView(RetrieveAPIView):
                 {
                     "data": serializer.data,
                     "retrieved_at": crypto_data[0].get("last_update"),
-                    "message": "Coinex crypto data retrieved successfully.",
+                    "message": "ArzDigital crypto data retrieved successfully.",
                 },
                 status=status.HTTP_200_OK,
             )
         except Exception as e:
             return Response(
-                {"message": f"Error retrieving Coinex crypto data"},
+                {"message": f"Error retrieving ArzDigital crypto data"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
