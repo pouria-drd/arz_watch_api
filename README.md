@@ -114,7 +114,6 @@ arz_watch_api/
 
     # Scrapers Schedulers Configuration
     INITIAL_RUN="True"
-    RUN_SCHEDULER="True"
     INTERVAL_TRIGGER_MINUTES="3"
 
     # Email Configuration
