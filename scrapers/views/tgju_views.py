@@ -94,7 +94,7 @@ class TGJUCoinView(RetrieveAPIView):
 class TGJUGoldView(RetrieveAPIView):
     http_method_names = ["post"]
     serializer_class = TGJUDataSerializer
-    # authentication_classes = [APIKeyAuthentication]
+    authentication_classes = [APIKeyAuthentication]
 
     throttle_scope = "user"
     throttle_classes = [ScopedRateThrottle]
