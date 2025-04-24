@@ -1,5 +1,7 @@
 import json
+import platform
 from selenium import webdriver
+from django.conf import settings
 from typing import Any, Generator
 from bs4 import BeautifulSoup, Tag
 from abc import ABC, abstractmethod
@@ -17,12 +19,14 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 class TGJUBaseScraper(ABC):
     """Abstract base class for scraping TGJU price tables."""
 
+    _platform = platform.system()
+
     def __init__(self, url: str, logger, scraper_type: str, timeout: int = 10):
         self.url = url
+        self.driver = None
         self.logger = logger
         self.timeout = timeout
         self.scraper_type = scraper_type
-        self.driver = None
 
     def fetch_data(self, pretty: bool = False) -> list[dict[str, Any]] | None:
         self.logger.info(f"Fetching {self.scraper_type} data from TGJU...")
@@ -48,12 +52,33 @@ class TGJUBaseScraper(ABC):
         return None
 
     @contextmanager
-    def _get_driver(self) -> Generator[webdriver.Chrome, None, None]:
-        service = Service(ChromeDriverManager().install())
+    def _get_driver(
+        self, auto_driver: bool = False
+    ) -> Generator[webdriver.Chrome, None, None]:
+        """Get a new Chrome driver instance."""
+        # Initialize the driver path based on the platform
+        linux_path = (
+            settings.BASE_DIR / "scrapers/drivers/chrome_driver_linux/chromedriver"
+        )
+        windows_path = (
+            settings.BASE_DIR
+            / "scrapers/drivers/chrome_driver_windows/chromedriver.exe"
+        )
+
+        driver_path = windows_path if self._platform == "Windows" else linux_path
+
+        # Initialize the service based on the auto_driver flag
+        service = (
+            Service(driver_path)
+            if not auto_driver
+            else Service(ChromeDriverManager().install())
+        )
+
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         driver = webdriver.Chrome(service=service, options=options)
+
         try:
             yield driver
         finally:

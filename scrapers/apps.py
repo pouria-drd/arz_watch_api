@@ -48,11 +48,11 @@ class ScrapersConfig(AppConfig):
                 },
                 "id": "tgju_scraper_scheduler",
             },
-            {
-                "command": "run_coinex_scraper",
-                "kwargs": {"crypto": True, "save": True},
-                "id": "coinex_scraper_scheduler",
-            },
+            # {
+            #     "command": "run_coinex_scraper",
+            #     "kwargs": {"crypto": True, "save": True},
+            #     "id": "coinex_scraper_scheduler",
+            # },
         ]
 
         for scraper in scrapers:
